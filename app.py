@@ -98,3 +98,7 @@ def menuCategoryDishReviewPage():
 def menuSearchPage():
     return 'Menu Search Page'
 
+if __name__ == '__main__':
+    app.run()
+
+    
