@@ -72,3 +72,6 @@ def adminUsersEditPage():
 def adminUsersDeletePage():
     return 'Admin Users Delete Page'
 
+if __name__ == '__main__':
+    app.run()
+
