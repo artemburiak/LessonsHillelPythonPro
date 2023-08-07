@@ -1,8 +1,7 @@
 from flask import Flask
+import database
 
 app = Flask(__name__)
-
-
 
 # Main:
 
@@ -26,7 +25,7 @@ def cartPage():
 def cartOrderPage():
     return 'Cart Order Page'
 
-@app.route('/cart/add', methods = ['POST'])
+@app.route('/cart/add', methods = ['POST', 'PUT'])
 def cartAddPage():
     return 'Cart Add Page'
 
@@ -80,7 +79,8 @@ def userAddressPage(id : int):
 
 @app.route('/menu', methods = ['GET'])
 def menuPage():
-    return 'Menu Page'
+    res = database.cursor.execute("SELECT * FROM Dishes").fetchall()
+    return res
 
 @app.route('/menu/<cat_name>', methods = ['GET'])
 def menuCategoryPage():
@@ -97,6 +97,44 @@ def menuCategoryDishReviewPage():
 @app.route('/menu/search', methods = ['GET', 'POST'])
 def menuSearchPage():
     return 'Menu Search Page'
+
+
+
+# Admin: 
+
+
+
+@app.route('/admin', methods = ['GET'])
+def adminPage():
+    return 'Admin Page'
+
+@app.route('/admin/dishes', methods = ['GET', 'POST'])
+def adminDishesPage():
+    return 'Admin dishes Page'
+
+@app.route('/admin/dishes/<dish>', methods = ['GET', 'PUT', 'DELETE'])
+def adminDishPage():
+    return 'Admin Dish Page'
+
+@app.route('/admin/categories', methods = ['GET', 'POST'])
+def adminCategoriesPage():
+    return 'Admin Categories Page'
+
+@app.route('/admin/categories/<category>', methods = ['GET', 'PUT', 'DELETE'])
+def adminCategoryPage():
+    return 'Admin Category Page'
+
+@app.route('/admin/orders', methods = ['GET'])
+def adminOrdersPage():
+    return 'Admin Orders Page'
+
+@app.route('/admin/orders/<order>', methods = ['GET', 'PUT'])
+def adminOrderPage():
+    return 'Admin Order Page'
+
+@app.route('/admin/search', methods = ['GET'])
+def adminSearchPage():
+    return 'Admin Search Page'
 
 if __name__ == '__main__':
     app.run()
