@@ -1,5 +1,5 @@
-from flask import Flask
-import database
+from flask import Flask, request
+from database import SQLiteDB
 
 app = Flask(__name__)
 
@@ -77,10 +77,34 @@ def userAddressPage(id : int):
 
 
 
-@app.route('/menu', methods = ['GET'])
+@app.route('/menu', methods = ['GET', 'POST'])
 def menuPage():
-    res = database.cursor.execute("SELECT * FROM Dishes").fetchall()
-    return res
+    with SQLiteDB('data.db') as db:
+        if request.method == 'POST':
+            data = request.form.to_dict()
+            data['Id'] = data["Name"].replace(' ', '_')
+            data['Active'] = 1
+            db.insert_into('Dishes', data)
+
+        dishes = db.select_from('Dishes', ['*'])
+    html_form = f"""
+    <form method="POST">
+        <input type="text" name="Name" placeholder="Name">
+        <input type="text" name="Price" placeholder="Price">
+        <input type="text" name="Description" placeholder="Description">
+        <input type="text" name="Image" placeholder="Image">
+        <input type="text" name="Category" placeholder="Category">
+        <input type="text" name="Ccal" placeholder="Ccal">
+        <input type="text" name="Protein" placeholder="Protein">
+        <input type="text" name="Fat" placeholder="Fat">
+        <input type="text" name="Carb" placeholder="Carb">
+        <input type="submit">
+    </form>
+
+    <br>
+    {str(dishes)}
+    """
+    return html_form
 
 @app.route('/menu/<cat_name>', methods = ['GET'])
 def menuCategoryPage():
